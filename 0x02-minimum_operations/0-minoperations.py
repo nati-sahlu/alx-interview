@@ -7,6 +7,10 @@ def minOperations(n):
     Calculates the fewest number of operations needed to result
     in exactly n H characters using only Copy All and Paste operations.
     """
+
+    if n < 2:
+        return 0
+
     result = 0
     x = 2
     while n > 1:
