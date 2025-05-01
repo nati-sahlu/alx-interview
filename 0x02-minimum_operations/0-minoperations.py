@@ -2,6 +2,7 @@
 """ Minimum Operations
     """
 
+
 def minOperations(n):
     """
     Calculates the fewest number of operations needed to result
