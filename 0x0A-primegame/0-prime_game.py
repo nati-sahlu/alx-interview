@@ -13,11 +13,11 @@ def isWinner(x, nums):
     Returns:
         str or None: Winner ("Maria" or "Ben") or None if it's a tie.
     """
-    if not nums or x < 1:
+    if not nums or x < 1 or x != len(nums):
         return None
 
     n = max(nums)
-    sieve = [True] * (n + 1)
+    sieve = [True for _ in range(max(n + 1, 2))]
     sieve[0] = sieve[1] = False
 
     for i in range(2, int(n ** 0.5) + 1):
@@ -25,10 +25,9 @@ def isWinner(x, nums):
             for j in range(i * i, n + 1, i):
                 sieve[j] = False
 
-    # Precompute cumulative prime counts
     prime_counts = [0] * (n + 1)
     count = 0
-    for i in range(n + 1):
+    for i in range(len(sieve)):
         if sieve[i]:
             count += 1
         prime_counts[i] = count
