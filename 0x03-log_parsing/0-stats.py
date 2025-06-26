@@ -1,51 +1,46 @@
 #!/usr/bin/python3
 """
-Script that reads stdin line by line and computes metrics
+Log parsing
 """
 
 import sys
 
+status_codes = {
+    '200': 0, '301': 0, '400': 0, '401': 0,
+    '403': 0, '404': 0, '405': 0, '500': 0
+}
+file_size = 0
+line_count = 0
 
-def print_stats(file_size, status_codes):
-    """
-    Print the accumulated metrics
-    """
+def print_stats():
+    """Prints accumulated stats"""
     print("File size: {}".format(file_size))
     for code in sorted(status_codes.keys()):
-        if status_codes[code] > 0:
+        if status_codes[code]:
             print("{}: {}".format(code, status_codes[code]))
 
+try:
+    for line in sys.stdin:
+        parts = line.strip().split()
+        if len(parts) >= 7:
+            status = parts[-2]
+            size = parts[-1]
 
-if __name__ == "__main__":
-    file_size = 0
-    status_codes = {
-        200: 0, 301: 0, 400: 0, 401: 0,
-        403: 0, 404: 0, 405: 0, 500: 0
-    }
-    line_count = 0
-
-    try:
-        for line in sys.stdin:
-            line_count += 1
+            if status in status_codes:
+                status_codes[status] += 1
             try:
-                parts = line.strip().split()
-                status = int(parts[-2])
-                size = int(parts[-1])
+                file_size += int(size)
+            except Exception:
+                pass
 
-                file_size += size
-                if status in status_codes:
-                    status_codes[status] += 1
-
-            except (IndexError, ValueError):
-                # Ignore lines that don't match the format
-                continue
-
+            line_count += 1
             if line_count % 10 == 0:
-                print_stats(file_size, status_codes)
+                print_stats()
 
-    except KeyboardInterrupt:
-        # Print before exiting on Ctrl+C
-        print_stats(file_size, status_codes)
-        raise
+except KeyboardInterrupt:
+    print_stats()
+    sys.exit(0)
 
-    print_stats(file_size, status_codes)
+# If file ends normally
+print_stats()
+
