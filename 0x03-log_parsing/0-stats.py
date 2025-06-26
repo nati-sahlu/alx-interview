@@ -12,12 +12,14 @@ status_codes = {
 file_size = 0
 line_count = 0
 
+
 def print_stats():
     """Prints accumulated stats"""
     print("File size: {}".format(file_size))
     for code in sorted(status_codes.keys()):
         if status_codes[code]:
             print("{}: {}".format(code, status_codes[code]))
+
 
 try:
     for line in sys.stdin:
@@ -41,6 +43,5 @@ except KeyboardInterrupt:
     print_stats()
     sys.exit(0)
 
-# If file ends normally
+# if success
 print_stats()
-
