@@ -5,6 +5,16 @@ This module provides an alternative implementation of the isWinner function.
 
 
 def isWinner(x, nums):
+    """
+    Determines the winner of the Prime Game.
+
+    Args:
+        x (int): Number of rounds.
+        nums (list): List of n values for each round.
+
+    Returns:
+        str or None: Winner ("Maria" or "Ben") or None if it's a tie.
+    """
     if not nums or x < 1:
         return None
 
