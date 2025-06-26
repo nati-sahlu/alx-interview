@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-"""
-This module provides an alternative implementation of the isWinner function.
-"""
+"""Module for Prime Game."""
 
 
 def isWinner(x, nums):
@@ -18,33 +16,29 @@ def isWinner(x, nums):
     if not nums or x < 1:
         return None
 
-    max_n = max(nums)
-    sieve = [0] * (max_n + 1)
+    n = max(nums)
+    sieve = [True] * (n + 1)
+    sieve[0] = sieve[1] = False
 
-    for i in range(2, max_n + 1):
-        if sieve[i] == 0:
-            for j in range(i, max_n + 1, i):
-                sieve[j] += 1
+    for i in range(2, int(n ** 0.5) + 1):
+        if sieve[i]:
+            for j in range(i * i, n + 1, i):
+                sieve[j] = False
 
-    # Count primes up to each index
-    prime_counts = [0] * (max_n + 1)
-    primes = 0
-    for i in range(2, max_n + 1):
-        if sieve[i] == 1:
-            primes += 1
-        prime_counts[i] = primes
+    # Precompute cumulative prime counts
+    prime_counts = [0] * (n + 1)
+    count = 0
+    for i in range(n + 1):
+        if sieve[i]:
+            count += 1
+        prime_counts[i] = count
 
-    maria_score = 0
-    ben_score = 0
+    maria = 0
+    for num in nums:
+        if prime_counts[num] % 2 == 1:
+            maria += 1
 
-    for n in nums:
-        if prime_counts[n] % 2 == 0:
-            ben_score += 1
-        else:
-            maria_score += 1
+    if maria * 2 == x:
+        return None
+    return "Maria" if maria * 2 > x else "Ben"
 
-    if maria_score > ben_score:
-        return "Maria"
-    elif ben_score > maria_score:
-        return "Ben"
-    return None
